@@ -1,0 +1,26 @@
+{
+  "name": "VideoApp",
+  "description": "",
+  "version": "0.0.1",
+  "main": "./VideoApp.js",
+  "author": {
+    "name": "mechdrew",
+    "email": "mechdrew@gmail.com"
+  },
+  "keywords": [],
+  "licenses": {
+    "type": "mit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/YOUR_LOGIN/VideoApp.git"
+  },
+  "bugs": {
+    "url": "http://github.com/YOUR_LOGIN/VideoApp/issues"
+  },
+  "dependencies": {
+    "crypto-js": "^3.1.4",
+    "express": "^4.12.0",
+    "socket.io": "^1.3.5"
+  }
+}
