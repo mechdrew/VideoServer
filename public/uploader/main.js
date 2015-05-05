@@ -4,11 +4,39 @@
   "use strict";
 
   var app = angular.module("FileUpload", []);
+  var BYTE = 1,
+      KILOBYTE = 1024,
+      MEGABYTE = 1048576;
 
   function UploadCtrl(
     $scope
   ) {
+    var transfers = {},
+      x = 1;
+    
+    function readMegabyte(options) {
+      var megaOffset = options.offset * MEGABYTE;
+      return options.reader.readAsArrayBuffer(options.file.slice(megaOffset, megaOffset + MEGABYTE));
+    }
+
+    function createTransfer(file) {
+      transfers[x] = {
+        reader: new FileReader()
+      };
+      return transfers[x++];
+    }
+
     $scope.upload = function () {
+      _.each($scope.files, function (file) {
+        var transfer = createTransfer(file);
+        transfer.reader.onloadend = function () {
+          console.log(transfer.reader.result.byteLength);
+        };
+        transfer.reader.onload = function (event) {
+          console.log(event.loaded);
+        };
+        transfer.reader.readAsArrayBuffer(file);
+      });
       console.log($scope.file);
     };
   }
