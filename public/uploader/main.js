@@ -1,5 +1,5 @@
 /*jslint browser: true, indent: 2, maxlen: 120, nomen: true, plusplus: true */
-/*globals angular, console */
+/*globals angular, console, io */
 (function () {
   "use strict";
 
@@ -8,11 +8,41 @@
       KILOBYTE = 1024,
       MEGABYTE = 1048576;
 
+  var socket = io();
+
   function UploadCtrl(
     $scope
   ) {
-    var transfers = {},
-      x = 1;
+    var STATE = {
+      STOP: "stop",
+      PAUSE: "pause",
+      START: "start"
+    };
+    var state = STATE.STOP;
+ 
+    var transfer;
+    
+    /*$scope.$watch("files", function (newVal, oldVal) {
+      
+    });*/
+    
+    function startUpload(file) {
+      /*if (transfer) {
+        console.log("error: transfer in progress - %j", transfer);
+        return;
+      }*/
+      socket.emit("upload_start", {
+        name: file.name,
+        size: file.size
+      });
+
+      /*transfer = {
+        file: file,
+        reader: new FileReader(),
+        currentIndex: 0,
+        chunkSize: MEGABYTE
+      };*/
+    }
     
     function readMegabyte(options) {
       var megaOffset = options.offset * MEGABYTE;
@@ -28,16 +58,14 @@
 
     $scope.upload = function () {
       _.each($scope.files, function (file) {
-        var transfer = createTransfer(file);
-        transfer.reader.onloadend = function () {
+        /*var transfer = createTransfer(file);
+        transfer.reader.onloadend = function (event) {
+          console.log(event);
           console.log(transfer.reader.result.byteLength);
         };
-        transfer.reader.onload = function (event) {
-          console.log(event.loaded);
-        };
-        transfer.reader.readAsArrayBuffer(file);
+        transfer.reader.readAsArrayBuffer(file);*/
+        startUpload(file);
       });
-      console.log($scope.file);
     };
   }
 
